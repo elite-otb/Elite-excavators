@@ -1,0 +1,10 @@
+{
+  "name": "elite-excavators-site",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "start": "npx serve public -l 8000",
+    "build": "rm -rf dist && cp -a public dist",
+    "preview": "npx serve dist -l 5000"
+  }
+}
