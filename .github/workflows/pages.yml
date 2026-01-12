@@ -4,16 +4,14 @@ on:
   push:
     branches: [ main ]
 
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
 jobs:
-  build-deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
-    concurrency:
-      group: "pages"
-      cancel-in-progress: true
-    permissions:
-      contents: read
-      pages: write
-      id-token: write
     steps:
       - uses: actions/checkout@v4
       - name: Setup Node.js
@@ -24,9 +22,12 @@ jobs:
         run: npm ci || echo "no dependencies"
       - name: Build
         run: npm run build
-      - name: Configure Pages
-        uses: actions/configure-pages@v3
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v1
+      - name: Deploy to GitHub Pages (gh-pages branch)
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
-          path: ./dist
+          branch: gh-pages
+          folder: dist
+          clean: true
+          cname: eliteequipment.it.com
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
